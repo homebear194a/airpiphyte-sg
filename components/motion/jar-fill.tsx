@@ -80,7 +80,16 @@ export function JarFill() {
               <div
                 ref={fillRef}
                 data-jar-fill
-                className="absolute inset-0 flex flex-col-reverse [clip-path:inset(calc((1_-_var(--r,0))_*_100%)_0_0_0)] will-change-[clip-path]"
+                /* Inline rather than a Tailwind arbitrary value. Measurement
+                   showed the arbitrary class was NOT being purged in
+                   production, so this is not a bug fix — but an inline style
+                   cannot be purged by definition, and it lets the -webkit-
+                   prefix ship for older WebKit. Strictly more robust. */
+                style={{
+                  clipPath: "inset(calc((1 - var(--r, 0)) * 100%) 0 0 0)",
+                  WebkitClipPath: "inset(calc((1 - var(--r, 0)) * 100%) 0 0 0)",
+                }}
+                className="absolute inset-0 flex flex-col-reverse will-change-[clip-path]"
               >
                 {LAYERS.map((l) => (
                   <div
