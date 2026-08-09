@@ -1,26 +1,143 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ============================================================================
+   Airpiphyte SG — design tokens
+   Generated from clients/airpiphyte-sg/03-design-system/tokens.json
+   Route A "Herbarium". Single-theme by intent: this is a paper-white brand and
+   every colour is painted explicitly, so the page holds on any ground.
+   ========================================================================= */
+
+@theme {
+  /* ---- colour: base palette -------------------------------------------- */
+  /* Ratios are measured, not asserted — see design-system.md §2.2 */
+  --color-paper: #f4f6f1;        /* ground, ~70% of every surface            */
+  --color-card: #ffffff;         /* raised surfaces                          */
+  --color-line: #dee4d8;         /* decorative hairline · 1.19:1 — NOT for controls */
+  --color-line-2: #c8d2c0;       /* stronger decorative rule · 1.44:1        */
+  --color-line-control: #7e9179; /* control boundary · 3.11:1 — clears 1.4.11 */
+  --color-ink: #16241a;          /* all type + logo · 14.83:1                 */
+  --color-moss: #5e6f5c;         /* secondary type · 4.94:1 — 14px floor      */
+  --color-frond: #1f6b3a;        /* every action · 5.99:1, carries white 6.51:1 */
+  --color-frond-hover: #1a5c31;
+  --color-bract: #93c13f;        /* graphic accent ONLY — 1.94:1, never type  */
+  --color-trichome: #a9bba2;     /* muted + disabled · 1.87:1                 */
+
+  /* ---- type ------------------------------------------------------------ */
+  --font-display: var(--font-geist-sans), "Segoe UI", "Helvetica Neue", system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), "Cascadia Mono", "SF Mono", Consolas, ui-monospace, monospace;
+  --font-editorial: var(--font-instrument-serif), Georgia, "Iowan Old Style", "Times New Roman", serif;
+
+  --text-display-xl: clamp(40px, 9vw, 96px);
+  --text-display-xl--line-height: 0.92;
+  --text-display-xl--letter-spacing: -0.035em;
+  --text-display-l: clamp(30px, 5.4vw, 60px);
+  --text-display-l--line-height: 1;
+  --text-display-l--letter-spacing: -0.035em;
+  --text-display-m: clamp(24px, 3.4vw, 40px);
+  --text-display-m--line-height: 1.05;
+  --text-display-m--letter-spacing: -0.025em;
+  --text-heading: 20px;
+  --text-heading--line-height: 1.25;
+  --text-heading--letter-spacing: -0.02em;
+  --text-body-l: 17px;
+  --text-body-l--line-height: 1.55;
+  --text-body: 16px;
+  --text-body--line-height: 1.55;
+  --text-body-s: 14px;           /* the moss floor — nothing smaller in moss  */
+  --text-body-s--line-height: 1.5;
+  --text-caption: 13px;
+  --text-caption--line-height: 1.45;
+  --text-label: 11px;
+  --text-label--line-height: 1.4;
+  --text-label--letter-spacing: 0.16em;
+  --text-micro: 10px;
+  --text-micro--line-height: 1.4;
+  --text-micro--letter-spacing: 0.14em;
+
+  /* ---- layout ---------------------------------------------------------- */
+  --spacing: 4px;                /* 4px base — Tailwind derives the scale     */
+  --container-shell: 1180px;
+  --radius-sm: 2px;
+  --radius-md: 3px;
+
+  /* ---- motion ---------------------------------------------------------- */
+  /* Nothing in the UI exceeds 400ms. ease-in and the CSS default `ease`
+     are banned; scroll-scrubbed motion is linear only. */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-io: cubic-bezier(0.77, 0, 0.175, 1);
+  --duration-press: 140ms;
+  --duration-tooltip: 160ms;
+  --duration-dropdown: 200ms;
+  --duration-hover: 220ms;
+  --duration-modal: 320ms;
+  --duration-reveal: 400ms;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* ============================================================================
+   Base
+   ========================================================================= */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+  /* the sticky 58px header must not cover an anchored care section */
+  scroll-padding-top: 74px;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+h1, h2, h3 {
+  text-wrap: balance;
+  font-weight: 700;
+}
+
+/* Digits that sit in a column must line up — prices, durations, counts. */
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Focus is never removed, only restyled. 2px frond at 3px offset. */
+:focus-visible {
+  outline: 2px solid var(--color-frond);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+::selection {
+  background: var(--color-bract);
+  color: var(--color-ink);
+}
+
+/* ============================================================================
+   Reduced motion — the binding contract from design-system.md §5.
+   Every pinned section collapses to normal flow; the turntable freezes at a
+   hero pose; the horizontal wall becomes native overflow scroll.
+   ========================================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+
+  [data-pinned-track] { height: auto !important; }
+  [data-pinned] {
+    position: static !important;
+    height: auto !important;
+    padding-block: 3rem;
+  }
+  [data-wall-track] { transform: none !important; }
+  [data-wall-scroller] { overflow-x: auto; scroll-snap-type: x mandatory; }
+  [data-jar-fill] { clip-path: none !important; }
+  [data-jar-step] { opacity: 1 !important; transform: none !important; }
+  [data-depth-float] { display: none !important; }
 }
