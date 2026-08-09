@@ -67,8 +67,15 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  /* suppressHydrationWarning guards against browser extensions injecting nodes
+     into the document before React hydrates. Be clear-eyed about it: it only
+     silences the warning, one level deep — it does not prevent a mismatch. It
+     is cheap insurance, not protection. The real protection is that no motion
+     on this site depends on hydration at all: every set-piece has a CSS
+     fallback, and the scroll driver writes custom properties rather than
+     React state, so a broken hydration cannot take the motion with it. */
   return (
-    <html lang="en-SG">
+    <html lang="en-SG" suppressHydrationWarning>
       <head>
         {/* AUDIT B1 — without an explicit charset every em-dash, middot and
             star in the copy renders as mojibake. The mockup lost this because
