@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { ArrangingBlock } from "@/components/arranging";
 import { MobileCta } from "@/components/chrome";
+import { DepthField } from "@/components/motion/depth-field";
 import { JarFill } from "@/components/motion/jar-fill";
+import { Turntable } from "@/components/motion/turntable";
+import { WorkshopWall } from "@/components/motion/workshop-wall";
 import { Button, EnquiryButton, Eyebrow, Ph, Quote, Section, SectionHead, Shell, StatTile } from "@/components/ui";
-import { WorkshopCard } from "@/components/workshop-card";
 import { GROUPS, REVIEWS, WORKSHOPS } from "@/lib/content";
 import { REVIEW_COUNT, REVIEW_SCORE, enquiry } from "@/lib/site";
 
@@ -11,13 +13,10 @@ export default function Home() {
   return (
     <>
       {/* ---- hero -------------------------------------------------------
-          Copy and CTA render on first paint. The decorative globe sits behind
-          them and never gates the enquiry — Journey 1, step 2. */}
-      <div className="relative overflow-hidden py-[clamp(46px,8vw,86px)]">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -right-[4%] top-10 hidden aspect-square w-[32%] max-w-[460px] rounded-full border border-ink/8 bg-[radial-gradient(38%_32%_at_32%_26%,rgba(255,255,255,0.95)_0%,rgba(255,255,255,0)_60%),radial-gradient(70%_70%_at_50%_60%,rgba(169,187,162,0.30)_0%,rgba(169,187,162,0.05)_72%)] xl:block"
-        />
+          Copy and CTA render on first paint, above the turntable, and never
+          depend on it — Journey 1, step 2. A visitor who never triggers the
+          motion still converts. */}
+      <Turntable>
         <Shell className="relative grid gap-5">
           <Eyebrow>Terrarium &amp; plant workshops · Singapore</Eyebrow>
           <h1 className="max-w-[13ch] text-display-xl">
@@ -38,21 +37,14 @@ export default function Home() {
             </Button>
           </div>
         </Shell>
-      </div>
+      </Turntable>
 
-      {/* ---- the four --------------------------------------------------- */}
-      <Section id="workshops">
-        <SectionHead
-          eyebrow="The four techniques"
-          title="Sealed. Open. Potted. Bound."
-          intro="Four relationships between a plant and its container. Start anywhere."
-        />
-        <div className="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-5">
-          {WORKSHOPS.map((w) => (
-            <WorkshopCard key={w.slug} workshop={w} compact />
-          ))}
-        </div>
-      </Section>
+      {/* ---- the four · horizontal wall on vertical scroll ---------------
+          The only journey-critical set-piece: this IS the page's navigation.
+          Falls back to a 2×2 grid below lg and under reduced motion. */}
+      <section id="workshops" className="border-t border-line pt-[clamp(56px,11vw,130px)]">
+        <WorkshopWall workshops={WORKSHOPS} />
+      </section>
 
       {/* ---- arranging (replaced the date list in v4.1) ------------------ */}
       <Section>
@@ -69,6 +61,26 @@ export default function Home() {
           />
         </Shell>
         <JarFill />
+      </section>
+
+      {/* ---- depth field · the one poetic line --------------------------
+          Purely atmospheric. Nothing in any journey depends on it, which is
+          why it is allowed to be the most decorative thing on the page — and
+          why it is the first thing to cut under budget pressure. */}
+      <section className="border-t border-line">
+        <DepthField>
+          <Eyebrow>Why a workshop, not a shop</Eyebrow>
+          <h2 className="text-display-l">
+            You make it.
+            <br />
+            <em className="font-editorial font-normal italic text-frond">You keep it.</em>
+          </h2>
+          <p className="max-w-[44ch] text-body text-moss">
+            Everything is on the table when you sit down — glass, soil, moss, plants, tools. No
+            experience needed, nothing to bring, nothing to clean up. Two hours later you are
+            holding a small world that did not exist that morning.
+          </p>
+        </DepthField>
       </section>
 
       {/* ---- group teaser ------------------------------------------------ */}
