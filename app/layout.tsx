@@ -47,7 +47,21 @@ export const metadata: Metadata = {
     locale: "en_SG",
     type: "website",
   },
-  robots: { index: true, follow: true },
+  /**
+   * NOINDEX UNTIL LAUNCH.
+   *
+   * The stable Vercel alias is publicly readable, and the site currently
+   * carries invented prices, an unconfirmed notice period and a placeholder
+   * contact number. Letting a search engine index that is worse than not
+   * being indexed at all — a wrong price in a search result outlives the fix.
+   *
+   * Flip it by setting NEXT_PUBLIC_ALLOW_INDEXING=true once the real figures
+   * and the WhatsApp number are in. Nothing else needs to change.
+   */
+  robots:
+    process.env.NEXT_PUBLIC_ALLOW_INDEXING === "true"
+      ? { index: true, follow: true }
+      : { index: false, follow: false },
 };
 
 export default function RootLayout({
